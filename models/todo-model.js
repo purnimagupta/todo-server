@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 
 
  let todoSchema = new mongoose.Schema({
-   item: { type: String, required: true, trim: true },
+   todo: { type: String, required: true, trim: true },
    createdAt: { type: Date, default: Date.now, required: true },
    bucket: { type: String, default: null},
    status: { type: String, default:"todo"}
