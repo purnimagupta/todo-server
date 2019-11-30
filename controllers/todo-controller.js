@@ -69,9 +69,12 @@ exports.createLabels = async (req, res, next) => {
 
     console.log("bucketOption ", label, value);
     if(label && value ) {
-      const savedOption = await dbOperations.createLabels(label, value);
+      const newLabel = await dbOperations.createLabels(label, value);
       // const options = await Bucket.find({});
-      res.status(200).json({labels: savedOption});
+      res.status(200).json({
+        label: newLabel.label,
+        value: newLabel.value
+      });
     }
     else {
       res.status(403).json({error: "Options are empty"})
@@ -84,7 +87,7 @@ exports.createLabels = async (req, res, next) => {
 exports.fetchLabels = async (req, res, next) => {
   try {
     
-    const fetchedLabels = await dbOperations.fetchLabels();
+    const fetchedLabels = await dbOperations.fetchLabels({label: true, value: true, _id: false});
     res.status(200).json({labels: fetchedLabels});
 
   } catch(error) {

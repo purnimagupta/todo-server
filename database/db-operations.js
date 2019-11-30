@@ -52,8 +52,8 @@ exports.createLabels = function(label, value) {
 }
 
 
-exports.fetchLabels = function() {
-  return Bucket.find({})
+exports.fetchLabels = function(projection) {
+  return Bucket.find({}, projection)
   .exec()
   .catch((err) => console.log("err occured in fetchLabels", err))
 }
