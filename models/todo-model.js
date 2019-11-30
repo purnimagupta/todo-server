@@ -9,9 +9,9 @@ const mongoose = require('mongoose');
 
  let todoSchema = new mongoose.Schema({
    todo: { type: String, required: true, trim: true },
-   createdAt: { type: Date, default: Date.now, required: true },
    bucket: { type: String, default: null},
-   status: { type: String, default:"todo"}
+   status: { type: String, default:"todo"},
+   createdAt: { type: Date, default: Date.now, required: true }
  })
 
 module.exports = mongoose.model('Todo', todoSchema);

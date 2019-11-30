@@ -5,16 +5,17 @@ const Bucket = require('../models/bucket-model');
 exports.saveTodo= async function(req, res, next) {
   try {
       const todo_item = req.body.todo;
-      // const bucket = req.body.bucket;
+      const bucket = req.body.bucket
 
-      const savedItem = await dbOperations.saveTodo(todo_item);
+      const savedItem = await dbOperations.saveTodo(todo_item, bucket);
       // const getallTodos = await dbOperations.fetchTodos();
       res.status(200).json({
         todos: savedItem
       })
       
-  } catch(e) {
-    res.status(500).send({msg: 'Server Error.'})
+  } catch(error) {
+    console.log("error is", error)
+    next(error)
   };
 }
 
@@ -26,22 +27,21 @@ exports.fetchTodo= async function(req, res, next) {
         todos: getallTodos
       })
       
-  } catch(e) {
-    res.status(500).send({msg: 'Server Error.'})
+  } catch(error) {
+    next(error)
   };
 }
 
 
 exports.updateTodo = async (req, res, next) => {
-  console.log("req.params is", req.params)
   try {
     if(ObjectId.isValid(req.params.id)) {
-      const id = req.params.id;
-      const todo = req.body.todo;
-      if(todo) {
+      const id = req.params.id;     
+      
+      if (req.body) {
         const item = await dbOperations.findTodoById(id);
         if(item) {
-          const updatedTodo = await dbOperations.updateTodo(id, todo);
+          const updatedTodo = await dbOperations.updateTodo(id, req.body);
           res.status(200).json({ todos: updatedTodo })
         }
         else {
@@ -51,10 +51,11 @@ exports.updateTodo = async (req, res, next) => {
       else {
         res.status(403).json({error: "Either item or id is empty"})
       }
-    }
-    else {
-      res.status(404).json({error: "id is not correct"})
-    }
+      }
+      else {
+        res.status(404).json({error: "id is not correct"})
+      }
+
   } catch(error) {
     next(error)
   } 
@@ -87,7 +88,6 @@ exports.fetchLabels = async (req, res, next) => {
     res.status(200).json({labels: fetchedLabels});
 
   } catch(error) {
-    console.log(error);
     next(error)
   } 
 }

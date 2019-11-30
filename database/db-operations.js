@@ -2,11 +2,12 @@ const Todo = require('../models/todo-model');
 const Bucket = require('../models/bucket-model');
 
 
-exports.saveTodo = function(item, bucket) {
-  const todo = new Todo({
-    todo: item,
+exports.saveTodo = function(todo, bucket) {
+  const newTodo = new Todo({
+    todo,
+    bucket,
   });
-  return todo.save()
+  return newTodo.save()
   .catch((err) => console.log("err occured in save todos ", err))
 
 }
@@ -23,10 +24,10 @@ exports.findTodoById = function(id) {
   .catch((err) => console.log("err occured in findTodoById", err))
 
 }
-exports.updateTodo = function(id, todo) {
+exports.updateTodo = function(id, item) {
   return Todo.findByIdAndUpdate(
     id, 
-    {todo: todo},
+    {todo: item.todo, status: item.status, bucket: item.bucket},
     {new: true},
   )
   .exec()
